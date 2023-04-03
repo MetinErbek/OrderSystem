@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Order;
 use Illuminate\Support\Facades\Validator;
+
 
 class ProductController extends Controller
 {
@@ -82,8 +84,26 @@ class ProductController extends Controller
             {
                 
                 $Product = $ProducrRS->first();
-                $Product->fill($reqs);
-                $Product->save();
+                $Product->update($reqs);
+
+                $Baskets = Order::whereHas('OrderProducts', function($q) use ($id){
+                    return $q->where('product_id', $id); 
+                   })->where('order_status', 'basket')->with('OrderProducts')->get();
+                
+                foreach($Baskets as $Order)
+                {
+                    
+                    foreach ($Order->OrderProducts as $orderProduct) 
+                    {
+                        $orderProduct->price = $orderProduct->qty * $Product->price;
+                        $orderProduct->save();
+
+                        $totalPrice = $Order->OrderProducts()->sum('price');
+                        $Order->update(['total_price' => $totalPrice]);
+                    }
+
+                }
+
                 return jsonResponse(TRUE, __('Product Saved !'), []);
             }
           }catch(\Illuminate\Database\QueryException $e)

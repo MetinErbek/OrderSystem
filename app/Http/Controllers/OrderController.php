@@ -114,14 +114,14 @@ class OrderController extends Controller
             if($BasketOrderRS->exists())
             {
                 // Has Basket Order
-                return $BasketOrderRS->with('OrderProducts')->first();
+                return $BasketOrderRS->with('OrderProducts.product')->first();
             } else {
                 // Create basket Order
                 $Order = Order::create([
                     'user_id'       =>  Auth::guard('api')->user()->id,
                     'order_status'  => 'basket'
                 ]);
-                return $Order->with('OrderProducts');
+                return $Order->with('OrderProducts.product');
             }
 
         } catch (Exception $e) {
