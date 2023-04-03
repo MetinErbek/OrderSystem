@@ -37,7 +37,7 @@ class CategoriesController extends Controller
 
             return jsonResponse(TRUE, 'Category Added !');
 
-        } catch(\Illuminate\Database\QueryException $e)
+        } catch(Exception $e)
         {
             return jsonResponse(FALSE, $e->getMessage(), []);
         }
@@ -100,7 +100,7 @@ class CategoriesController extends Controller
                 return jsonResponse(TRUE, __('Category Removed !'), []);
                
             }
-          }catch(\Illuminate\Database\QueryException $e)
+          }catch(Exception $e)
           {
               return jsonResponse(FALSE, $e->getMessage(), []);
           }

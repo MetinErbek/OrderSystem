@@ -10,7 +10,7 @@ class OrderProducts extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'orders';
+    protected $table = 'order_products';
     protected $fillable = [
         'order_id',
         'product_id',
@@ -19,5 +19,14 @@ class OrderProducts extends Model
         'price',
         'discount'
     ];
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+    ];
+
+    public function product()
+    {
+        return $this->belongsTo('App\Models\Product', 'product_id');
+    }
 
 }

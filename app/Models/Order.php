@@ -17,5 +17,14 @@ class Order extends Model
         'total_discount',
         'order_status'
     ];
+    protected $hidden = [
+        'deleted_at',
+        'updated_at',
+    ];
+    
+    public function OrderProducts()
+    {
+        return $this->hasMany('App\Models\OrderProducts', 'order_id', 'id');
+    }
 
 }

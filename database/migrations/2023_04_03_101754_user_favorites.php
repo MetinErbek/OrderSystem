@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order_products', function (Blueprint $table) {
+        Schema::create('user_favorites', function (Blueprint $table) {
             $table->id();
-            $table->integer('order_id');
+            $table->integer('user_id');
             $table->integer('product_id');
-            $table->decimal('product_price', 10, 2);
-            $table->integer('qty');
-            $table->decimal('price', 10, 2);
-            $table->decimal('discount', 10, 2)->default('0');
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order_products');
+        Schema::dropIfExists('user_favorites');
     }
 };

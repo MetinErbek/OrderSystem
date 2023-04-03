@@ -17,6 +17,7 @@ class ProductController extends Controller
         return jsonResponse(TRUE, '', ['Products' => $Products]);
     }
 
+
     /**
      * Show the form for creating a new resource.
      */
@@ -106,9 +107,31 @@ class ProductController extends Controller
                 return jsonResponse(TRUE, __('Product Removed !'), []);
                
             }
-          }catch(\Illuminate\Database\QueryException $e)
+          }catch(Exception $e)
           {
               return jsonResponse(FALSE, $e->getMessage(), []);
           }
     }
+
+    public function makeProductToShowCase($product_id )
+    {
+        try {
+            $ProductRS = Product::where('id', $product_id);
+            if($ProductRS->exists())
+            {
+                $Product = $ProductRS->first();
+                $Product->update(['status'=>'showcase']);
+                return jsonResponse(TRUE, __('Product made showcase successfuly !'), []);
+            }
+        } catch (Exception $e) {
+            return jsonResponse(FALSE, $e->getMessage(), []);
+        }
+    }
+
+    public function getShowcaseProducts()
+    {
+        $Products = Product::where('status', 'showcase')->paginate(15);
+        return jsonResponse(TRUE, '', ['Products' => $Products]);
+    }
+
 }
